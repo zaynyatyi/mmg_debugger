@@ -132,6 +132,7 @@ class Base
 				   stillDebugging = false;
 				   debugQueue.add( function() { trace("bye"); }  );
 				   onResult("bye");
+				   run();
 
 				case "exit","quit":
 				   onResult("ok");
@@ -142,7 +143,7 @@ class Base
 						onResult("Already running.");
 					else
 						run();
-				_:
+				case _:
 					onResult("Unknown command:" + command);
 			}
 		}
