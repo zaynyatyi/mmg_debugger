@@ -124,11 +124,26 @@ class Base
 			var words = command.split(" ");
 			switch(words[0])
 			{
+				case "":
+				   onResult("");
+				   // Do nothing
+
+				case "bye":
+				   stillDebugging = false;
+				   debugQueue.add( function() { trace("bye"); }  );
+				   onResult("bye");
+
+				case "exit","quit":
+				   onResult("ok");
+				   Debugger.exit();
+				
 				case "cont","c":
-				if (!threadStopped)
-					onResult("Already running.");
-				else
-					run();
+					if (!threadStopped)
+						onResult("Already running.");
+					else
+						run();
+				_:
+					onResult("Unknown command:" + command);
 			}
 		}
 		onCloseInput();
