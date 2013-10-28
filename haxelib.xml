@@ -1,5 +1,6 @@
-<project name="mmg_debugger" url="https://www.nailedgames.com/" license="MIT">
+<project name="mmgdebugger" url="https://www.nailedgames.com/" license="MIT">
     <user name="zaynyatyi"/>
     <description>Debugger for neko and cpp targets</description>
     <version name="0.0.1">Just initial release</version>
+	<!--<depends name="hxcpp" /> commented cause bad proxy on my work machine-->
 </project>
