@@ -60,13 +60,76 @@ class Base
 
 	function onStopped() { }
 	
+	function onRunning() { }
+	
 	function onCloseInput() { }
+	
+	function onResult(inResult:String) { }
+	
+	function getNextCommand() : String { return "bye"; }
+	
+	function getStack()
+	{
+		stack = haxe.CallStack.callStack();
+		setFrame(1);
+	}
+	
+	function checkStack()
+	{
+		if (threadStopped && stack==null)
+		{
+			debugQueue.add( getStack );
+			waitDebugger(false);
+		}
+	}
+
+	function setFrame(inFrame:Int)
+	{
+		if (stack!=null && inFrame>0 && inFrame <= stack.length )
+		{
+			frame = inFrame;
+			vars = Debugger.getStackVars(frame);
+		}
+	}
+	
+	function run()
+	{
+		stack = null;
+		vars = null;
+		debugQueue.add( function() { threadStopped = false; inputThread.sendMessage("running"); }  );
+		var result = Thread.readMessage(true);
+		onRunning();
+		onResult("ok");
+	}
+	
+	function waitDebugger(inSendResult:Bool=true)
+	{
+		debugQueue.add( function() inputThread.sendMessage("ok")  );
+		var result = Thread.readMessage(true);
+		if (inSendResult)
+		{
+			if (result!="ok")
+				onResult("Debugger out of sync");
+			else
+				onResult("ok");
+		}
+	}
 	
 	function inputLoop()
 	{
 		while (stillDebugging)
 		{
-			
+			checkStack();
+			var command = getNextCommand();
+			var words = command.split(" ");
+			switch(words[0])
+			{
+				case "cont","c":
+				if (!threadStopped)
+					onResult("Already running.");
+				else
+					run();
+			}
 		}
 		onCloseInput();
 	}
