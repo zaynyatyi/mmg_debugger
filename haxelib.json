@@ -1,0 +1,11 @@
+{
+    "name" : "mmgdebugger",
+    "license" : "MIT",
+    "version" : "0.0.1",
+    "description" : "Debugger for neko and cpp targets",
+    "contributors" : [ "zaynyatyi" ],
+    "releasenote" : "",
+    "dependencies" : {
+
+    }
+}
